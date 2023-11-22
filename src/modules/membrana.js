@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
 
-const MyThreeJSComponent = () => {
+const Membrana = () => {
   useEffect(() => {
     // FORMATION OF THE MESH
     const R = [];
@@ -45,7 +45,7 @@ const MyThreeJSComponent = () => {
     const K2 = 1; // damping constant
 
     // SIMULATION
-    const animate = () => {
+    const animate = async () => {
       for (let i = 0; i < 1000; i++) {
         for (let k = 0; k < N - numGrados - 1; k++) {
           const numVec = p[k].vec.length;
@@ -75,7 +75,7 @@ const MyThreeJSComponent = () => {
         // ... (use Three.js to render the scene)
 
         // Uncomment the following line if you want to pause between frames
-        // await new Promise((resolve) => setTimeout(resolve, 1));
+        await new Promise((resolve) => setTimeout(resolve, 1));
       }
     };
 
@@ -85,4 +85,4 @@ const MyThreeJSComponent = () => {
   return <div id="threejs-container" style={{ width: '100%', height: '100vh' }} />;
 };
 
-export default MyThreeJSComponent;
+export default Membrana;
