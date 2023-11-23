@@ -1,4 +1,4 @@
-import './inicio.css';
+import './App.css';
 import Grafica from '../modules/grafica';
 import Menu from '../modules/menu/menu';
 import Membrana from '../modules/membrana'
