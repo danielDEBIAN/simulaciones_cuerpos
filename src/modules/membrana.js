@@ -1,24 +1,96 @@
-import React, { useEffect } from 'react';
-import * as THREE from 'three';
+// import React, { useEffect, useRef } from 'react';
+// import * as THREE from 'three';
+// import { Delaunay } from 'd3-delaunay';
+
+// const Membrana = () => {
+//   const canvasRef = useRef(null);
+
+//   useEffect(() => {
+//     // FORMATION OF THE MESH
+//     const R = [[0, 0, 0]];
+//     const numGrados = 20;
+
+//     for (let r = 0.1; r <= 1.0; r += 0.1) {
+//       const intervalo = Array.from({ length: numGrados }, (_, i) => (i * 2 * Math.PI) / numGrados);
+//       const x = intervalo.map((angle) => r * Math.cos(angle));
+//       const y = intervalo.map((angle) => r * Math.sin(angle));
+//       const z = Array(numGrados).fill(0);
+//       R.push(...x.map((_, i) => [x[i], y[i], z[i]]));
+//     }
+
+//     // Initialization
+//     const tri = Delaunay.from(R.map((point) => point.slice(0, 2)));
+//     const scene = new THREE.Scene();
+//     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+//     const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     document.body.appendChild(renderer.domElement);
+
+//     const geometry = new THREE.BufferGeometry();
+//     const positions = new Float32Array(R.flat());
+//     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+//     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+//     const mesh = new THREE.Mesh(geometry, material);
+//     scene.add(mesh);
+
+//     camera.position.z = 5;
+
+//     const animate = () => {
+//       requestAnimationFrame(animate);
+
+//       // Update mesh or perform physics calculations here
+
+//       renderer.render(scene, camera);
+//     };
+
+//     animate();
+
+//     window.addEventListener('resize', () => {
+//       camera.aspect = window.innerWidth / window.innerHeight;
+//       camera.updateProjectionMatrix();
+//       renderer.setSize(window.innerWidth, window.innerHeight);
+//     });
+
+//     // Cleanup
+//     return () => {
+//       window.removeEventListener('resize', () => { });
+//       document.body.removeChild(renderer.domElement);
+//     };
+//   }, []);
+
+//   return <canvas ref={canvasRef} />;
+// };
+
+// export default Membrana;
+
+import React, { useEffect, useState } from 'react';
+import { Delaunay } from 'd3-delaunay';
+import { Scatter } from 'react-chartjs-2';
 
 const Membrana = () => {
+  const [data, setData] = useState([]);
+  const numGrados = 20;
+
   useEffect(() => {
     // FORMATION OF THE MESH
-    const R = [];
-    const numGrados = 20;
-
-    for (let r = 0.1; r <= 1; r += 0.1) {
-      const intervalo = new Array(numGrados + 1).fill(0).map((_, i) => (2 * Math.PI * i) / numGrados);
-      const x = intervalo.map((theta) => r * Math.cos(theta));
-      const y = intervalo.map((theta) => r * Math.sin(theta));
-      const z = new Array(numGrados + 1).fill(0);
-
-      R.push(...x.map((_, i) => [x[i], y[i], z[i]]));
+    let R = [[0, 0, 0]];
+    for (let r = 0.1; r <= 1.0; r += 0.1) {
+      const intervalo = Array.from({ length: numGrados }, (_, i) => (2 * Math.PI * i) / numGrados);
+      const x = intervalo.map(theta => r * Math.cos(theta));
+      const y = intervalo.map(theta => r * Math.sin(theta));
+      const z = new Array(numGrados).fill(0);
+      R = R.concat(x.map((_, i) => [x[i], y[i], z[i]]));
     }
 
     // Initialization
+    const tri = Delaunay.from(R.map(p => [p[0], p[1]]));
+    const initialData = R.map(p => ({ x: p[0], y: p[1], z: p[2] }));
+    setData(initialData);
+
     const N = R.length;
-    const p = Array.from({ length: N }, (_, k) => ({
+    const p = Array(N).fill(null).map((_, k) => ({
       r: R[k],
       v: [0, 0, 0],
       f: [0, 0, 0],
@@ -27,12 +99,9 @@ const Membrana = () => {
     }));
 
     for (let k = 0; k < N; k++) {
-      const [fil, col] = p[k].vec;
-      const ele = Array.from(new Set([...fil, ...col])).filter((el) => el > k);
-      p[k].vec = ele;
-
-      for (let j = 0; j < ele.length; j++) {
-        p[k].deq[j] = Math.sqrt(p[k].r.reduce((acc, _, i) => acc + (p[k].r[i] - R[ele[j]][i]) ** 2, 0)) * 0.9;
+      p[k].vec = tri.neighbors(k).filter(neighbor => neighbor > k);
+      for (const j of p[k].vec) {
+        p[k].deq.push(Math.sqrt(Math.pow(R[k][0] - R[j][0], 2) + Math.pow(R[k][1] - R[j][1], 2)) * 0.9);
       }
     }
 
@@ -40,49 +109,47 @@ const Membrana = () => {
       p[k].r[2] = 1;
     }
 
-    const DT = 0.001;
+    const DT = 0.01;
     const K = 100; // spring constant
     const K2 = 1; // damping constant
 
-    // SIMULATION
-    const animate = async () => {
-      for (let i = 0; i < 1000; i++) {
-        for (let k = 0; k < N - numGrados - 1; k++) {
-          const numVec = p[k].vec.length;
+    const simulateMotion = () => {
+      // Simulation logic here...
 
-          for (let j = 0; j < numVec; j++) {
-            const indVec = p[k].vec[j];
-            const DR = p[indVec].r.map((coord, idx) => coord - p[k].r[idx]);
-            const modulo = Math.sqrt(DR.reduce((acc, val) => acc + val ** 2, 0));
-            const U = DR.map((coord) => coord / modulo);
-            const F = U.map((coord) => K * (modulo - p[k].deq[j]) * coord);
+      // Update data and trigger re-render
+      setData(updatedData);
 
-            p[k].f = p[k].f.map((coord, idx) => coord + F[idx]);
-            p[indVec].f = p[indVec].f.map((coord, idx) => coord - F[idx]);
-          }
-
-          p[k].v = p[k].v.map((coord, idx) => coord - K2 * p[k].v[idx]) * DT + p[k].v;
-          p[k].r = p[k].r.map((coord, idx) => coord + p[k].v[idx] * DT);
-        }
-
-        // Update positions
-        for (let k = 0; k < N; k++) {
-          R[k] = p[k].r;
-          p[k].f = [0, 0, 0];
-        }
-
-        // Render the scene
-        // ... (use Three.js to render the scene)
-
-        // Uncomment the following line if you want to pause between frames
-        await new Promise((resolve) => setTimeout(resolve, 1));
-      }
+      // Repeat simulation
+      requestAnimationFrame(simulateMotion);
     };
 
-    animate();
+    // Start simulation
+    simulateMotion();
   }, []);
 
-  return <div id="threejs-container" style={{ width: '100%', height: '100vh' }} />;
+  return (
+    <Scatter
+      data={{
+        datasets: [
+          {
+            label: 'Mesh',
+            showLine: false,
+            fill: false,
+            pointRadius: 5,
+            backgroundColor: 'rgba(75,192,192,1)',
+            data: data,
+          },
+        ],
+      }}
+      options={{
+        scales: {
+          x: { min: -1, max: 1 },
+          y: { min: -1, max: 1 },
+          z: { min: -2, max: 2 },
+        },
+      }}
+    />
+  );
 };
 
 export default Membrana;
