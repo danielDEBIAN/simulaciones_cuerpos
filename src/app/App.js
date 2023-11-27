@@ -1,6 +1,6 @@
 import './App.css';
 import Membrana from '../modules/membrana';
-// import Cuerda from '../modules/cuerda';
+import Cuerda from '../modules/cuerda';
 import React from 'react';
 
 const inicio = () => {
@@ -11,9 +11,9 @@ const inicio = () => {
           Simulacion de vibraciones en cuerpos solidos
         </h1>
       </div>
-      {/* <div>
+      <div className='Cuerda'>
         {Cuerda()}
-      </div> */}
+      </div>
       <div className='Membrana'>
         {Membrana()}
       </div>
