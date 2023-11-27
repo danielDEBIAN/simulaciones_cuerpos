@@ -57,12 +57,11 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
---- 
+---
 
 ## Deployment
 
 For deployment we use the Firebase hosting (google).\
 In order to deploy newer versions we use the command:
 
-`firebase deploy --only hosting:simulacciones-cuerpos`
-
+`firebase deploy --only hosting:simulacion-cuerpos`

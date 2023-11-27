@@ -1,19 +1,20 @@
 import './App.css';
-import Grafica from '../modules/grafica';
-import Menu from '../modules/menu/menu';
-import Membrana from '../modules/membrana'
+import Membrana from '../modules/membrana';
+// import Cuerda from '../modules/cuerda';
 import React from 'react';
 
 const inicio = () => {
   return (
     <div className="App">
-      <div className="container">
-        {Menu()}
+      <div className='Header'>
+        <h1 className='Title'>
+          Simulacion de vibraciones en cuerpos solidos
+        </h1>
       </div>
-      <div>
-        {Grafica()}
-      </div>
-      <div>
+      {/* <div>
+        {Cuerda()}
+      </div> */}
+      <div className='Membrana'>
         {Membrana()}
       </div>
     </div>
