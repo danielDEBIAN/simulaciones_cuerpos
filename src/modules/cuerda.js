@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import './cuerda.css';
 import * as THREE from 'three';
 
 const Cuerda = () => {
   useEffect(() => {
-    // Scene
+    // Escena
+    const parent = document.getElementById('cuerda');
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(50, parent.clientWidth / parent.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(500, 500);
-    document.getElementById('rope-simulation').appendChild(renderer.domElement);
+    renderer.setSize(parent.clientWidth, parent.clientHeight);
+    renderer.setClearColor(0x181926, 1);
+    document.getElementById('cuerda').appendChild(renderer.domElement);
 
-    // Rope
+    // Cuerda
     const numPoints = 30;
     const ropeGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(numPoints * 3);
@@ -19,22 +22,20 @@ const Cuerda = () => {
       const theta = (i / (numPoints * 3 - 1)) * Math.PI;
       positions[i] = Math.sin(theta) * 5;
       positions[i + 1] = Math.cos(theta) * 5;
-      positions[i + 2] = theta * 2; // To give some depth to the rope
+      positions[i + 2] = theta * 2; // Para darle profundidad a la cuerda
     }
 
+    // Generacion de la geometria
     ropeGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const ropeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+    const ropeMaterial = new THREE.LineBasicMaterial({ color: 0xcad3f5 });
     const rope = new THREE.Line(ropeGeometry, ropeMaterial);
     scene.add(rope);
 
-    // Camera
-    camera.position.z = 15;
-
-    // Animation
-    const animate = () => {
+    // Animacion
+    function animate () {
       requestAnimationFrame(animate);
 
-      // Simulate rope movement (modify positions over time)
+      // Simular el movimiento de la cuerda (modificar las posiciones con el tiempo)
       const positions = rope.geometry.attributes.position.array;
       const time = Date.now() * 0.001;
 
@@ -44,28 +45,33 @@ const Cuerda = () => {
 
       rope.geometry.attributes.position.needsUpdate = true;
 
-      // Render the scene
+      // Renderizar la escena
       renderer.render(scene, camera);
     };
 
+    camera.position.z = 15;
+    // Inicializacion de la animacion
     animate();
 
-    // Handle window resize
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+    // Modificar cuando se cambie el tamaño de la ventana
+    window.addEventListener('resize', () => {
+      camera.aspect = parent.clientWidth / parent.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(500, 500);
-    };
+      renderer.setSize(parent.clientWidth, parent.clientHeight);
+    });
 
-    window.addEventListener('resize', handleResize);
-
-    // Cleanup
+    // Limpiar el event listener cuando el componente se desmonte
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', () => {
+        camera.aspect = parent.clientWidth / parent.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(parent.clientWidth, parent.clientHeight);
+      });
+      document.getElementById('cuerda').appendChild(renderer.domElement);
     };
   }, []);
 
-  return <div id="rope-simulation" style={{ width: '100%', height: '100vh' }} />;
+  return <div id="cuerda"/>;
 };
 
 export default Cuerda;

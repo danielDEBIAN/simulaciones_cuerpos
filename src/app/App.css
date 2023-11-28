@@ -1,5 +1,5 @@
 * {
-    background-color: #2C3333;
+    background-color: #CAD3f5;
 }
 
 .App {
@@ -10,11 +10,13 @@
     display: none;
 }
 
-.Membrana {
-    display: inline-block;
+.Title {
+    color: #CAD3f5;
+    width: 100%;
 }
 
-.Title {
-    color: #2C3333;
-    background-color: #E7F6F2;
+canvas {
+    display: flex;
+    border-radius: 12px 12px 12px 12px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 6px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 4px 6px, rgba(0, 0, 0, 0.09) 4px 6px;
 }

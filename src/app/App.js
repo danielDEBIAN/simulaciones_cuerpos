@@ -2,19 +2,16 @@ import './App.css';
 import Membrana from '../modules/membrana';
 import Cuerda from '../modules/cuerda';
 import React from 'react';
+import Header from './Header'; // import the Header component
 
 const inicio = () => {
   return (
     <div className="App">
-      <div className='Header'>
-        <h1 className='Title'>
-          Simulacion de vibraciones en cuerpos solidos
-        </h1>
-      </div>
-      <div className='Cuerda'>
+      <Header />
+      <div id="simulacion-cuerda">
         {Cuerda()}
       </div>
-      <div className='Membrana'>
+      <div id="simulacion-membrana">
         {Membrana()}
       </div>
     </div>

@@ -1,0 +1,28 @@
+.Header {
+    background-color: #494d64;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #000000;
+    display: flex;
+    width: calc(100% - 20px);
+}
+
+.Title , img {
+    background-color: #494d64;
+}
+
+.Title {
+    color: rgb(244, 247, 255);
+    font-size: 35px;
+    text-align: left;
+    padding-left: 15px;
+    width: calc(100% - 20px);
+}
+
+img {
+    height: 50px;
+    width: 50px;
+    margin-left: 20px;
+}

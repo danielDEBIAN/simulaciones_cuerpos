@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import './membrana.css';
 import * as THREE from 'three';
 
@@ -6,11 +6,13 @@ const Membrana = () => {
 
   useEffect(() => {
     // Creacion de la escena
+    const parent = document.getElementById('membrana');
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(30, parent.clientWidth / parent.clientHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(500, 500);
-    document.body.appendChild(renderer.domElement);
+    renderer.setSize(parent.clientWidth, parent.clientHeight);
+    renderer.setClearColor(0x181926, 1);
+    document.getElementById('membrana').appendChild(renderer.domElement);
 
     // Formacion de la malla
     const R = [];
@@ -28,7 +30,7 @@ const Membrana = () => {
     const geometry = new THREE.BufferGeometry();
     const vertices = new Float32Array(R.flat());
     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    const material = new THREE.MeshBasicMaterial({ color: 0xE7F6F2, side: THREE.DoubleSide });
+    const material = new THREE.MeshBasicMaterial({ color: 0xcad3f5, side: THREE.DoubleSide });
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
@@ -51,6 +53,8 @@ const Membrana = () => {
             const vec = ele.filter(j => j > k);
             return [fil.concat(Array(ele.length).fill(k)), col.concat(Array(vec.length).fill(vec))];
         }, [[], []]);
+
+        console.debug(fil,col);
 
         const indices = [];
         for (let i = 0; i < R.length; i++) {
@@ -108,19 +112,25 @@ const Membrana = () => {
     // Inicializacion de la animacion
     animate();
 
-    // Configurar el espacio de la ventana
+    // Modificar cuando se cambie el tamaño de la ventana
     window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.aspect = parent.clientWidth / parent.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(500, 500);
+      renderer.setSize(parent.clientWidth, parent.clientHeight);
     });
 
     // Limpieza de la ventana para recargar
     return () => {
-      window.removeEventListener('resize', () => { });
-      document.body.removeChild(renderer.domElement);
+        window.removeEventListener('resize', () => {
+            camera.aspect = parent.clientWidth / parent.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(parent.clientWidth, parent.clientHeight);
+        });
+        document.getElementById('membrana').appendChild(renderer.domElement);
     };
   }, []);
+
+  return <div id="membrana"/>
 };
 
 export default Membrana;
