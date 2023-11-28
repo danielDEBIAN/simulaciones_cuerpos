@@ -15,6 +15,76 @@
     width: 100%;
 }
 
+button {
+    background-color: #494d64;
+    border: none;
+    color: #CAD3f5;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 12px;
+    margin: 4px 2px;
+    margin-right: 30px;
+}
+
+h1 {
+    color: #2e303f;
+    font-size: 30px;
+    margin: 0px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.cuerda-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.botones-cuerda {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.scrollable-div {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-direction: column;
+}
+
+.scrollable-div button {
+    margin-right: 10px;
+}
+
+@media (min-width: 500px) {
+    .cuerda-div {
+      flex-direction: row;
+    }
+}
+
+.membrana-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.botones-membrana {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media (min-width: 500px) {
+    .membrana-div {
+      flex-direction: row;
+    }
+}
+
 canvas {
     display: flex;
     border-radius: 12px 12px 12px 12px;
