@@ -8,21 +8,6 @@ const inicio = () => {
   return (
     <div className="App">
       <Header />
-      <h1>Cuerda</h1>
-      <div className='cuerda-div'>
-        <div className='scrollable-div'>
-          <button>Option 1</button>
-          <button>Option 2</button>
-          <button>Option 3</button>
-          <button>Option 4</button>
-          <button>Option 5</button>
-        </div>
-        <div className='botones-cuerda'>
-          <button>Hello</button>
-          <button>World</button>
-        </div>
-        {Cuerda()}
-      </div>
       <h1>Membrana</h1>
       <div className='membrana-div'>
         <div className='scrollable-div'>
@@ -37,6 +22,21 @@ const inicio = () => {
           <button>World</button>
         </div>
         {Membrana()}
+      </div>
+      <h1>Cuerda</h1>
+      <div className='cuerda-div'>
+        <div className='scrollable-div'>
+          <button>Option 1</button>
+          <button>Option 2</button>
+          <button>Option 3</button>
+          <button>Option 4</button>
+          <button>Option 5</button>
+        </div>
+        <div className='botones-cuerda'>
+          <button>Hello</button>
+          <button>World</button>
+        </div>
+        {Cuerda()}
       </div>
     </div>
   );
