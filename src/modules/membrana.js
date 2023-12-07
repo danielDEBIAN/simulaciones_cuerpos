@@ -130,7 +130,7 @@ const Membrana = () => {
     };
   }, []);
 
-  return <div id="membrana"/>
+  return <div id="membrana"/>;
 };
 
 export default Membrana;

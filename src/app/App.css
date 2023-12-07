@@ -36,6 +36,44 @@ h1 {
     margin-bottom: 30px;
 }
 
+.pendulo-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.botones-pendulo {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media (min-width: 500px) {
+    .pendulo-div {
+      flex-direction: row;
+    }
+}
+
+.resorte-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.botones-resorte {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media (min-width: 500px) {
+    .resorte-div {
+      flex-direction: row;
+    }
+}
+
 .cuerda-div {
     display: flex;
     justify-content: center;
@@ -47,17 +85,6 @@ h1 {
     display: flex;
     align-items: center;
     flex-direction: column;
-}
-
-.scrollable-div {
-    display: flex;
-    overflow-x: auto;
-    white-space: nowrap;
-    flex-direction: column;
-}
-
-.scrollable-div button {
-    margin-right: 10px;
 }
 
 @media (min-width: 500px) {
@@ -83,6 +110,17 @@ h1 {
     .membrana-div {
       flex-direction: row;
     }
+}
+
+.scrollable-div {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-direction: column;
+}
+
+.scrollable-div button {
+    margin-right: 10px;
 }
 
 canvas {
