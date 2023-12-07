@@ -1,7 +1,7 @@
 import './App.css';
 import Membrana from '../modules/membrana';
 import Cuerda from '../modules/cuerda';
-import Pendulo from '../modules/pendulo';
+// import Pendulo from '../modules/pendulo';
 import Resorte from '../modules/resorte';
 import React from 'react';
 import Header from './Header'; // import the Header component
@@ -25,7 +25,7 @@ const inicio = () => {
         </div>
         {Resorte()}
       </div>
-      <h1>Pendulo</h1>
+      {/* <h1>Pendulo</h1>
       <div className='pendulo-div'>
         <div className='scrollable-div'>
           <button>Option 1</button>
@@ -39,7 +39,7 @@ const inicio = () => {
           <button>World</button>
         </div>
         {Pendulo()}
-      </div>
+      </div> */}
       <h1>Membrana</h1>
       <div className='membrana-div'>
         <div className='scrollable-div'>
